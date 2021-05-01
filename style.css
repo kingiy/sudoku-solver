@@ -1,0 +1,43 @@
+.topleft
+{
+	border-left: solid;
+	border-top: solid;
+}
+
+.top
+{
+	border-top: solid;
+}
+
+.topright
+{
+	border-top: solid;
+	border-right: solid;
+}
+
+.left
+{
+	border-left: solid;
+}
+
+.right
+{
+	border-right: solid;
+}
+
+.bottom
+{
+	border-bottom: solid;
+}
+
+.bottomleft
+{
+	border-bottom: solid;
+	border-left: solid;
+}
+
+.bottomright
+{
+	border-bottom: solid;
+	border-right: solid;
+}
