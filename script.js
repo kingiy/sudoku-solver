@@ -3,8 +3,11 @@
 function solvePuzzle()
 {
 	let currentBoard = [];
+	let solved = false;
+	let allocatedNumbers = [];
+	let allSolved = 1;
 
-	//hardcode a sudoku puzzle for testing
+	//hardcode of a sudoku puzzle for testing
 	currentBoard[1] = 8;
 	currentBoard[4] = 1;
 	currentBoard[6] = 7;
@@ -42,71 +45,234 @@ function solvePuzzle()
 	currentBoard[74] = 6;
 	currentBoard[75] = 1;
 	currentBoard[76] = 9;
-	currentBoard[79] = 3;
+	currentBoard[79] = 3;	
 
-	console.log(currentBoard);
-	let solved = false;
-	while(solved === false)
+	//get input from user and sanitise it
+	/*for (var i = 1; i < 82; i++) 
 	{
-		currentBoard = checkBox(currentBoard);
-		currentBoard = checkRow(currentBoard);
-		currentBoard = checkCol(currentBoard);
+		currentBoard[i] = document.getElementById(i).value;
+		if(currentBoard[i] === "")
+		{
+			currentBoard[i] = undefined;
+		}
+		else
+		{
+			currentBoard[i] = parseInt(currentBoard[i]);
+		}
+		
+	}	
+	console.log(currentBoard);*/
 
+	//if there is no input set solved to true
+	if(currentBoard.length === 0)
+	{
 		solved = true;
 	}
-	console.log(currentBoard);
-	
-	for (var i = 81; i >= 1; i--) 
-	{
 
-		document.getElementById(i).value = currentBoard[i];
-	
+	//initialise the empty squares on the board
+	for (var i = 1; i < 82; i++) 
+	{
+		if(currentBoard[i] === undefined)
+		{
+			currentBoard[i] = [1,2,3,4,5,6,7,8,9]
+		}
+	}
+
+	//loop through the solving algorithm
+	while(solved === false)
+	{
+		//using a for loop 1000x could defintely be improved!
+		for (var i = 0; i < 1000; i++) 
+		{
+			currentBoard = checkBox(currentBoard);
+			currentBoard = arrayToNum(currentBoard);
+
+			currentBoard = checkRow(currentBoard);
+			currentBoard = arrayToNum(currentBoard);
+
+			currentBoard = checkCol(currentBoard);
+			currentBoard = arrayToNum(currentBoard);
+		}
+
+		solved = true;
 	}	
+
+	//write the results to the page
+	for (var i = 1; i < 82; i++) 
+	{
+		document.getElementById(i).value = currentBoard[i];
+	}	
+
+	//log it in the console if for some reason the puzzle isn't solved
+	console.log(currentBoard);
+}
+
+function arrayToNum(currentBoard)
+{
+	//convert any arrays that only contain one number
+	for(var i = 1; i < 82; i++)
+	{
+		if(currentBoard[i].length === 1)
+		{
+			currentBoard[i] = currentBoard[i][0];
+		}
+	}
+	return currentBoard;
 }
 
 function checkBox(currentBoard)
 {
-	const boxOne 	= [1, 2, 3, 10, 11, 12, 19, 20, 21];
-	const boxTwo 	= [4, 5, 6, 13, 14, 15, 22, 23, 24];
-	const boxThree 	= [7, 8, 9, 16, 17, 18, 25, 26, 27];
-	const boxFour 	= [28, 29, 30, 37, 38, 39, 46, 47, 48];
-	const boxFive	= [31, 32, 33, 40, 41, 42, 49, 50, 51];
-	const boxSix 	= [34, 35, 36, 43, 44, 45, 52, 53, 54];
-	const boxSeven 	= [55, 56, 57, 64, 65, 66, 73, 74, 75];
-	const boxEight 	= [58, 59, 60, 67, 68, 69, 76, 77, 78];
-	const boxNine 	= [61, 62, 63, 70, 71, 72, 79, 80, 81];
+	let box = [];
+	let allocatedNumbers = [];
+ 	
+ 	//group together all the boxes with the square id's in their arrays
+ 	box[0] 	= [1, 2, 3, 10, 11, 12, 19, 20, 21];
+	box[1] 	= [4, 5, 6, 13, 14, 15, 22, 23, 24];
+	box[2]	= [7, 8, 9, 16, 17, 18, 25, 26, 27];
+	box[3] 	= [28, 29, 30, 37, 38, 39, 46, 47, 48];
+	box[4]	= [31, 32, 33, 40, 41, 42, 49, 50, 51];
+	box[5] 	= [34, 35, 36, 43, 44, 45, 52, 53, 54];
+	box[6]	= [55, 56, 57, 64, 65, 66, 73, 74, 75];
+	box[7]	= [58, 59, 60, 67, 68, 69, 76, 77, 78];
+	box[8]	= [61, 62, 63, 70, 71, 72, 79, 80, 81];
 
-	currentBoard[i] = document.getElementById(i).value;
+	//any numbers already in the box are added to an array of already allocated numbers
+	for (var l = 0; l < 9; l++)
+	{
+		for(var i = 0; i < 9; i++)
+		{
+			if(typeof currentBoard[box[l][i]] === "number")
+			{
+				allocatedNumbers.push(currentBoard[box[l][i]]);
+			}
+		}
+
+		allocatedNumbers.sort();
+		allocatedNumbers.reverse();
+	
+		//find the allocated numbers on the board and modify the board accordingly
+		let index;
+		for (var j = 0; j < 9; j++) 
+		{
+			if(typeof currentBoard[box[l][j]] === "object")
+			{
+				for (var k = 0; k < allocatedNumbers.length; k++) 
+				{
+					if(currentBoard[box[l][j]].includes(allocatedNumbers[k]))
+					{
+						index = currentBoard[box[l][j]].indexOf(allocatedNumbers[k]);
+						currentBoard[box[l][j]].splice(index, 1);
+					}
+				}
+			}	
+		}
+		allocatedNumbers = [];
+	}
+
 	return currentBoard;
 }
 
 function checkRow(currentBoard)
 {
-	const rowOne 	= [1, 2, 3, 4, 5, 6, 7, 8, 9];
-	const rowTwo 	= [10, 11, 12, 13, 14, 15, 16, 17, 18];
-	const rowThree	= [19, 20, 21, 22, 23, 24, 25, 26, 27];
-	const rowFour 	= [28, 29, 30, 31, 32, 33, 34, 35, 36];
-	const rowFive 	= [37, 28, 39, 40, 41, 42, 43, 44, 45];
-	const rowSix  	= [46, 47, 48, 49, 50, 51, 52, 53, 54];
-	const rowSeven 	= [55, 56, 57, 58, 59, 60, 61, 62, 63];
-	const rowEight 	= [64, 65, 66, 67, 68, 69, 70, 71, 72];
-	const rowNine	= [73, 74, 75, 76, 77, 78, 79, 80, 81];
+	let row = [];
+	let allocatedNumbers = [];
+
+	//group together all the rows with the square id's in their arrays
+	row[0] 	= [1, 2, 3, 4, 5, 6, 7, 8, 9];
+	row[1] 	= [10, 11, 12, 13, 14, 15, 16, 17, 18];
+	row[2]	= [19, 20, 21, 22, 23, 24, 25, 26, 27];
+	row[3] 	= [28, 29, 30, 31, 32, 33, 34, 35, 36];
+	row[4] 	= [37, 28, 39, 40, 41, 42, 43, 44, 45];
+	row[5]  = [46, 47, 48, 49, 50, 51, 52, 53, 54];
+	row[6]	= [55, 56, 57, 58, 59, 60, 61, 62, 63];
+	row[7]	= [64, 65, 66, 67, 68, 69, 70, 71, 72];
+	row[8]	= [73, 74, 75, 76, 77, 78, 79, 80, 81];
+	
+	//any numbers already in the row are added to an array of already allocated numbers
+	for (var l = 0; l < 9; l++)
+	{
+		for(var i = 0; i < 9; i++)
+		{
+			if(typeof currentBoard[row[l][i]] === "number")
+			{
+				allocatedNumbers.push(currentBoard[row[l][i]]);
+			}
+		}
+
+		allocatedNumbers.sort();
+		allocatedNumbers.reverse();
+
+		//find the allocated numbers on the board and modify the board accordingly
+		let index;
+		for (var j = 0; j < 9; j++) 
+		{
+			if(typeof currentBoard[row[l][j]] === "object")
+			{
+				for (var k = 0; k < allocatedNumbers.length; k++) 
+				{
+					if(currentBoard[row[l][j]].includes(allocatedNumbers[k]))
+					{
+						index = currentBoard[row[l][j]].indexOf(allocatedNumbers[k]);
+						currentBoard[row[l][j]].splice(index, 1);
+					}
+				}
+			}
+		}
+		allocatedNumbers = [];
+	}
 
 	return currentBoard;
 }
 
 function checkCol(currentBoard)
 {
-	const colOne 	= [1, 10, 19, 28, 37, 46, 55, 64, 73];
-	const colTwo	= [2, 11, 20, 29, 38, 47, 56, 65, 74];
-	const colThree	= [3, 12, 21, 30, 39, 48, 57, 66, 75];
-	const colFour	= [4, 13, 22, 31, 40, 49, 58, 67, 76];
-	const colFive 	= [5, 14, 23, 32, 41, 50, 59, 68, 77];
-	const colSix	= [6, 15, 24, 33, 42, 51, 60, 69, 78];
-	const colSeven	= [7, 16, 25, 34, 43, 52, 61, 70, 79];
-	const colEight	= [8, 17, 26, 35, 44, 53, 62, 71, 80];
-	const colNine 	= [9, 18, 27, 36, 45, 54, 63, 72, 81];
-	
+	let col = [];
+	let allocatedNumbers = [];
+
+	//group together all the columns with the square id's in their arrays
+	col[0] 	= [1, 10, 19, 28, 37, 46, 55, 64, 73];
+	col[1]	= [2, 11, 20, 29, 38, 47, 56, 65, 74];
+	col[2]	= [3, 12, 21, 30, 39, 48, 57, 66, 75];
+	col[3]	= [4, 13, 22, 31, 40, 49, 58, 67, 76];
+	col[4] 	= [5, 14, 23, 32, 41, 50, 59, 68, 77];
+	col[5]	= [6, 15, 24, 33, 42, 51, 60, 69, 78];
+	col[6]	= [7, 16, 25, 34, 43, 52, 61, 70, 79];
+	col[7]	= [8, 17, 26, 35, 44, 53, 62, 71, 80];
+	col[8] 	= [9, 18, 27, 36, 45, 54, 63, 72, 81];
+
+	//any numbers already in the column are added to an array of already allocated numbers
+	for (var l = 0; l < 9; l++)
+	{
+		for(var i = 0; i < 9; i++)
+		{
+			if(typeof currentBoard[col[l][i]] === "number")
+			{
+				allocatedNumbers.push(currentBoard[col[l][i]]);
+			}
+		}
+
+		allocatedNumbers.sort();
+		allocatedNumbers.reverse();
+
+		//find the allocated numbers on the board and modify the board accordingly
+		let index;
+		for (var j = 0; j < 9; j++) 
+		{
+			if(typeof currentBoard[col[l][j]] === "object")
+			{
+				for (var k = 0; k < allocatedNumbers.length; k++) 
+				{
+					if(currentBoard[col[l][j]].includes(allocatedNumbers[k]))
+					{
+						index = currentBoard[col[l][j]].indexOf(allocatedNumbers[k]);
+						currentBoard[col[l][j]].splice(index, 1);
+					}
+				}
+			}
+		}
+		allocatedNumbers = [];
+	}
+
 	return currentBoard;
 }
 
