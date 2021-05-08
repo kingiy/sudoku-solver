@@ -8,7 +8,7 @@ function solvePuzzle()
 	let allSolved = 1;
 
 	//hardcode of a sudoku puzzle for testing
-	currentBoard[1] = 8;
+	/*currentBoard[1] = 8;
 	currentBoard[4] = 1;
 	currentBoard[6] = 7;
 	currentBoard[7] = 4;
@@ -45,10 +45,10 @@ function solvePuzzle()
 	currentBoard[74] = 6;
 	currentBoard[75] = 1;
 	currentBoard[76] = 9;
-	currentBoard[79] = 3;	
+	currentBoard[79] = 3;*/
 
 	//get input from user and sanitise it
-	/*for (var i = 1; i < 82; i++) 
+	for (var i = 1; i < 82; i++) 
 	{
 		currentBoard[i] = document.getElementById(i).value;
 		if(currentBoard[i] === "")
@@ -61,14 +61,15 @@ function solvePuzzle()
 		}
 		
 	}	
-	console.log(currentBoard);*/
+
+	console.log(currentBoard);
 
 	//if there is no input set solved to true
 	if(currentBoard.length === 0)
 	{
 		solved = true;
 	}
-
+	
 	//initialise the empty squares on the board
 	for (var i = 1; i < 82; i++) 
 	{
@@ -87,11 +88,12 @@ function solvePuzzle()
 			currentBoard = checkBox(currentBoard);
 			currentBoard = arrayToNum(currentBoard);
 
+			currentBoard = checkCol(currentBoard);
+			currentBoard = arrayToNum(currentBoard);
+
 			currentBoard = checkRow(currentBoard);
 			currentBoard = arrayToNum(currentBoard);
 
-			currentBoard = checkCol(currentBoard);
-			currentBoard = arrayToNum(currentBoard);
 		}
 
 		solved = true;
@@ -147,9 +149,6 @@ function checkBox(currentBoard)
 			}
 		}
 
-		allocatedNumbers.sort();
-		allocatedNumbers.reverse();
-	
 		//find the allocated numbers on the board and modify the board accordingly
 		let index;
 		for (var j = 0; j < 9; j++) 
@@ -158,7 +157,7 @@ function checkBox(currentBoard)
 			{
 				for (var k = 0; k < allocatedNumbers.length; k++) 
 				{
-					if(currentBoard[box[l][j]].includes(allocatedNumbers[k]))
+					if(currentBoard[box[l][j]].includes(allocatedNumbers[k]) && currentBoard[box[l][j]].length > 1)
 					{
 						index = currentBoard[box[l][j]].indexOf(allocatedNumbers[k]);
 						currentBoard[box[l][j]].splice(index, 1);
@@ -199,9 +198,6 @@ function checkRow(currentBoard)
 			}
 		}
 
-		allocatedNumbers.sort();
-		allocatedNumbers.reverse();
-
 		//find the allocated numbers on the board and modify the board accordingly
 		let index;
 		for (var j = 0; j < 9; j++) 
@@ -210,7 +206,7 @@ function checkRow(currentBoard)
 			{
 				for (var k = 0; k < allocatedNumbers.length; k++) 
 				{
-					if(currentBoard[row[l][j]].includes(allocatedNumbers[k]))
+					if(currentBoard[row[l][j]].includes(allocatedNumbers[k]) && currentBoard[row[l][j]].length > 1)
 					{
 						index = currentBoard[row[l][j]].indexOf(allocatedNumbers[k]);
 						currentBoard[row[l][j]].splice(index, 1);
@@ -251,9 +247,6 @@ function checkCol(currentBoard)
 			}
 		}
 
-		allocatedNumbers.sort();
-		allocatedNumbers.reverse();
-
 		//find the allocated numbers on the board and modify the board accordingly
 		let index;
 		for (var j = 0; j < 9; j++) 
@@ -262,7 +255,7 @@ function checkCol(currentBoard)
 			{
 				for (var k = 0; k < allocatedNumbers.length; k++) 
 				{
-					if(currentBoard[col[l][j]].includes(allocatedNumbers[k]))
+					if(currentBoard[col[l][j]].includes(allocatedNumbers[k]) && currentBoard[col[l][j]].length > 1)
 					{
 						index = currentBoard[col[l][j]].indexOf(allocatedNumbers[k]);
 						currentBoard[col[l][j]].splice(index, 1);
