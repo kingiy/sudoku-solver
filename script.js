@@ -5,7 +5,6 @@ function solvePuzzle()
 	let currentBoard = [];
 	let solved = false;
 	let allocatedNumbers = [];
-	let allSolved = 1;
 
 	//hardcode of a sudoku puzzle for testing
 	/*currentBoard[1] = 8;
@@ -93,7 +92,6 @@ function solvePuzzle()
 
 			currentBoard = checkRow(currentBoard);
 			currentBoard = arrayToNum(currentBoard);
-
 		}
 
 		solved = true;

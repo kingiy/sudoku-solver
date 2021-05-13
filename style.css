@@ -41,3 +41,16 @@
 	border-bottom: solid;
 	border-right: solid;
 }
+
+table
+{
+	table-layout: fixed;
+	width: 25%;
+	height: 25%;
+}
+
+input
+{
+	width: 25px;
+	height: 25px;
+}
