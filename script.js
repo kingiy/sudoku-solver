@@ -58,7 +58,6 @@ function solvePuzzle()
 		{
 			currentBoard[i] = parseInt(currentBoard[i]);
 		}
-		
 	}	
 
 	console.log(currentBoard);
@@ -85,13 +84,8 @@ function solvePuzzle()
 		for (var i = 0; i < 1000; i++) 
 		{
 			currentBoard = checkBox(currentBoard);
-			currentBoard = arrayToNum(currentBoard);
-
-			currentBoard = checkCol(currentBoard);
-			currentBoard = arrayToNum(currentBoard);
-
 			currentBoard = checkRow(currentBoard);
-			currentBoard = arrayToNum(currentBoard);
+			currentBoard = checkCol(currentBoard);
 		}
 
 		solved = true;
@@ -105,19 +99,6 @@ function solvePuzzle()
 
 	//log it in the console if for some reason the puzzle isn't solved
 	console.log(currentBoard);
-}
-
-function arrayToNum(currentBoard)
-{
-	//convert any arrays that only contain one number
-	for(var i = 1; i < 82; i++)
-	{
-		if(currentBoard[i].length === 1)
-		{
-			currentBoard[i] = currentBoard[i][0];
-		}
-	}
-	return currentBoard;
 }
 
 function checkBox(currentBoard)
@@ -153,12 +134,20 @@ function checkBox(currentBoard)
 		{
 			if(typeof currentBoard[box[l][j]] === "object")
 			{
-				for (var k = 0; k < allocatedNumbers.length; k++) 
+				if(currentBoard[box[l][j]].length === 1)
 				{
-					if(currentBoard[box[l][j]].includes(allocatedNumbers[k]) && currentBoard[box[l][j]].length > 1)
+					currentBoard[box[l][j]] = currentBoard[box[l][j]][0];
+					console.log(currentBoard[box[l][j]]);
+				}
+				else if(currentBoard[box[l][j]].length > 1)
+				{
+					for (var k = 0; k < allocatedNumbers.length; k++) 
 					{
-						index = currentBoard[box[l][j]].indexOf(allocatedNumbers[k]);
-						currentBoard[box[l][j]].splice(index, 1);
+						if(currentBoard[box[l][j]].includes(allocatedNumbers[k]))
+						{
+							index = currentBoard[box[l][j]].indexOf(allocatedNumbers[k]);
+							currentBoard[box[l][j]].splice(index, 1);
+						}
 					}
 				}
 			}	
@@ -195,19 +184,27 @@ function checkRow(currentBoard)
 				allocatedNumbers.push(currentBoard[row[l][i]]);
 			}
 		}
-
+		
 		//find the allocated numbers on the board and modify the board accordingly
 		let index;
 		for (var j = 0; j < 9; j++) 
 		{
 			if(typeof currentBoard[row[l][j]] === "object")
 			{
-				for (var k = 0; k < allocatedNumbers.length; k++) 
+				if(currentBoard[row[l][j]].length === 1)
 				{
-					if(currentBoard[row[l][j]].includes(allocatedNumbers[k]) && currentBoard[row[l][j]].length > 1)
+					currentBoard[row[l][j]] = currentBoard[row[l][j]][0];
+					console.log(currentBoard[row[l][j]]);
+				}
+				else if(currentBoard[row[l][j]].length > 1)
+				{
+					for (var k = 0; k < allocatedNumbers.length; k++) 
 					{
-						index = currentBoard[row[l][j]].indexOf(allocatedNumbers[k]);
-						currentBoard[row[l][j]].splice(index, 1);
+						if(currentBoard[row[l][j]].includes(allocatedNumbers[k]))
+						{
+							index = currentBoard[row[l][j]].indexOf(allocatedNumbers[k]);
+							currentBoard[row[l][j]].splice(index, 1);
+						}
 					}
 				}
 			}
@@ -244,19 +241,27 @@ function checkCol(currentBoard)
 				allocatedNumbers.push(currentBoard[col[l][i]]);
 			}
 		}
-
+		
 		//find the allocated numbers on the board and modify the board accordingly
 		let index;
 		for (var j = 0; j < 9; j++) 
 		{
 			if(typeof currentBoard[col[l][j]] === "object")
 			{
-				for (var k = 0; k < allocatedNumbers.length; k++) 
+				if(currentBoard[col[l][j]].length === 1)
 				{
-					if(currentBoard[col[l][j]].includes(allocatedNumbers[k]) && currentBoard[col[l][j]].length > 1)
+					currentBoard[col[l][j]] = currentBoard[col[l][j]][0];
+					console.log(currentBoard[col[l][j]]);
+				}
+				else if(currentBoard[col[l][j]].length > 1)
+				{
+					for (var k = 0; k < allocatedNumbers.length; k++) 
 					{
-						index = currentBoard[col[l][j]].indexOf(allocatedNumbers[k]);
-						currentBoard[col[l][j]].splice(index, 1);
+						if(currentBoard[col[l][j]].includes(allocatedNumbers[k]))
+						{
+							index = currentBoard[col[l][j]].indexOf(allocatedNumbers[k]);
+							currentBoard[col[l][j]].splice(index, 1);
+						}
 					}
 				}
 			}
